@@ -41,7 +41,7 @@ def newCake():
 #    if 'username' not in login_session:
 #        return redirect('/login')
     if request.method == 'POST':
-      newCake = Cake(name = request.form['name'], description=request.form['description'], course=request.form['course'], user_id=login_session['user_id'])
+      newCake = Cake(name = request.form['name'], description=request.form['description'], course=request.form['course'])
       session.add(newCake)
       flash('New Cake %s Successfully Created' % newCake.name)
       session.commit()
@@ -90,8 +90,7 @@ def deleteCake(cake_id):
 def showElements(cake_id):
     cake = session.query(Cake).filter_by(id=cake_id).one()
 #    creator = getUserInfo(restaurant.user_id)
-    elements = session.query(Element).filter_by(
-        cake_id=cake_id).all()
+    elements = session.query(Element).filter_by(cake_id=cake_id).all()
 #    if 'username' not in login_session or creator.id != login_session['user_id']:
 #        return render_template('publicmenu.html', items=items, restaurant=restaurant, creator=creator)
 #    else:

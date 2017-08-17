@@ -42,8 +42,8 @@ class Element(Base):
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     price = Column(String(8))
-    element_id = Column(Integer, ForeignKey('cake.id'))
-    element = relationship(Cake)
+    cake_id = Column(Integer, ForeignKey('cake.id'))
+    cake = relationship(Cake)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
