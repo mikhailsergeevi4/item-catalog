@@ -56,11 +56,12 @@ def editCake(cake_id):
 #        return redirect('/login')
 #  if editedRestaurant.user_id != login_session['user_id']:
 #        return "<script>function myFunction() {alert('You are not authorized to edit this restaurant. Please create your own restaurant in order to edit.');}</script><body onload='myFunction()''>"
+  editedCake = session.query(Cake).filter_by(id = cake_id).one()
   if request.method == 'POST':
       if request.form['course']:
-          editedItem.course = request.form['course']
+          editedCake.course = request.form['course']
       if request.form['description']:
-          editedItem.description = request.form['description']
+          editedCake.description = request.form['description']
       if request.form['name']:
         editedCake.name = request.form['name']
       flash('Cake Successfully Edited %s' % editedCake.name)
@@ -76,6 +77,7 @@ def deleteCake(cake_id):
 #        return redirect('/login')
 #   if restaurantToDelete.user_id != login_session['user_id']:
 #        return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
+   cakeToDelete = session.query(Cake).filter_by(id = cake_id).one()
    if request.method == 'POST':
     session.delete(cakeToDelete)
     flash('%s Successfully Deleted' % cakeToDelete.name)
@@ -112,7 +114,7 @@ def newElement(cake_id):
       flash('New Element %s Item Successfully Created' % (newElement.name))
       return redirect(url_for('showElements', cake_id = cake_id))
   else:
-      return render_template('nelement.html', cake_id = cake_id)
+      return render_template('nelement.html', cake_id = cake_id, cake = cake)
 
 #Edit a menu item
 @app.route('/cake/<int:cake_id>/elements/<int:element_id>/edit', methods=['GET','POST'])
@@ -148,7 +150,7 @@ def deleteElement(cake_id, element_id):
 #    if login_session['user_id'] != restaurant.user_id:
 #        return "<script>function myFunction() {alert('You are not authorized to delete menu items to this restaurant. Please create your own restaurant in order to delete items.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        session.delete(ElementToDelete)
+        session.delete(elementToDelete)
         session.commit()
         flash('Element Successfully Deleted')
         return redirect(url_for('showElements', cake_id = cake_id))
