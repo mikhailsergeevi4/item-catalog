@@ -181,13 +181,13 @@ def showCakes():
   cakes = session.query(Cake).order_by(asc(Cake.name))
   return render_template('main.html', cakes = cakes)
 
-#Create a new restaurant
+#Create a new Cake
 @app.route('/cake/new/', methods=['GET','POST'])
 def newCake():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-      newCake = Cake(name = request.form['name'], description=request.form['description'], course=request.form['course'])
+      newCake = Cake(name = request.form['name'], description=request.form['description'], course=request.form['course'], user_id=login_session['user_id'])
       session.add(newCake)
       flash('New Cake %s Successfully Created' % newCake.name)
       session.commit()
@@ -195,14 +195,14 @@ def newCake():
     else:
       return render_template('ncake.html')
 
-#Edit a restaurant
+#Edit a Cake
 @app.route('/cake/<int:cake_id>/edit/', methods = ['GET', 'POST'])
 def editCake(cake_id):
   if 'username' not in login_session:
         return redirect('/login')
-#  if editedRestaurant.user_id != login_session['user_id']:
-#        return "<script>function myFunction() {alert('You are not authorized to edit this restaurant. Please create your own restaurant in order to edit.');}</script><body onload='myFunction()''>"
   editedCake = session.query(Cake).filter_by(id = cake_id).one()
+  if editedCake.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit this cake. Please create your own cake in order to edit.');}</script><body onload='myFunction()''>"
   if request.method == 'POST':
       if request.form['course']:
           editedCake.course = request.form['course']
@@ -216,14 +216,14 @@ def editCake(cake_id):
     return render_template('ecake.html', cake = editedCake)
 
 
-#Delete a restaurant
+#Delete a Cake
 @app.route('/cake/<int:cake_id>/delete/', methods = ['GET','POST'])
 def deleteCake(cake_id):
    if 'username' not in login_session:
         return redirect('/login')
-#   if restaurantToDelete.user_id != login_session['user_id']:
-#        return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()''>"
    cakeToDelete = session.query(Cake).filter_by(id = cake_id).one()
+   if cakeToDelete.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to delete this cake. Please create your own cake in order to delete.');}</script><body onload='myFunction()''>"
    if request.method == 'POST':
     session.delete(cakeToDelete)
     flash('%s Successfully Deleted' % cakeToDelete.name)
@@ -232,78 +232,88 @@ def deleteCake(cake_id):
    else:
     return render_template('dcake.html', cake = cakeToDelete)
 
-#Show a restaurant menu
+#Show elements in cake
 @app.route('/cake/<int:cake_id>/')
 @app.route('/cake/<int:cake_id>/elements/')
 def showElements(cake_id):
     cake = session.query(Cake).filter_by(id=cake_id).one()
-#    creator = getUserInfo(restaurant.user_id)
     elements = session.query(Element).filter_by(cake_id=cake_id).all()
-#    if 'username' not in login_session or creator.id != login_session['user_id']:
-#        return render_template('publicmenu.html', items=items, restaurant=restaurant, creator=creator)
-#    else:
     return render_template('elements.html', elements=elements, cake=cake)
 
-#Create a new menu item
+#Create a new Element
 @app.route('/cake/<int:cake_id>/elements/new/',methods=['GET','POST'])
 def newElement(cake_id):
   if 'username' not in login_session:
       return redirect('/login')
   cake = session.query(Cake).filter_by(id = cake_id).one()
-#  if login_session['user_id'] != restaurant.user_id:
-#        return "<script>function myFunction() {alert('You are not authorized to add menu items to this restaurant. Please create your own restaurant in order to add items.');}</script><body onload='myFunction()''>"
+  if login_session['user_id'] != cake.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to add elements to this cake. Please create your own cake in order to elements.');}</script><body onload='myFunction()''>"
   if request.method == 'POST':
       newElement = Element(name=request.form['name'], price=request.form[
-                           'price'], cake_id=cake_id)
+                           'price'], cake_id=cake_id, user_id=cake.user_id)
       session.add(newElement)
       session.commit()
-      flash('New Element %s Item Successfully Created' % (newElement.name))
+      flash('New Element %s Successfully Created' % (newElement.name))
       return redirect(url_for('showElements', cake_id = cake_id))
   else:
       return render_template('nelement.html', cake_id = cake_id, cake = cake)
 
-#Edit a menu item
+#Edit a Element
 @app.route('/cake/<int:cake_id>/elements/<int:element_id>/edit', methods=['GET','POST'])
 def editElement(cake_id, element_id):
     if 'username' not in login_session:
         return redirect('/login')
     editedElement = session.query(Element).filter_by(id = element_id).one()
     cake = session.query(Cake).filter_by(id = cake_id).one()
-#    if login_session['user_id'] != restaurant.user_id:
-#        return "<script>function myFunction() {alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}</script><body onload='myFunction()''>"
+    if login_session['user_id'] != cake.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to edit elements to this cake. Please create your own cake in order to edit elements.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form['name']:
             editedElement.name = request.form['name']
-
         if request.form['price']:
             editedElement.price = request.form['price']
-
         session.add(editedElement)
         session.commit()
         flash('Element Successfully Edited')
         return redirect(url_for('showElements', cake_id = cake_id))
     else:
-        return render_template('eelement.html', cake_id = cake_id, element_id = element_id, element = editedElement)
+        return render_template('eelement.html', cake_id = cake_id, element_id = element_id, element = editedElement, cake=cake)
 
 
-#Delete a menu item
+#Delete a Element
 @app.route('/cake/<int:cake_id>/elements/<int:element_id>/delete', methods = ['GET','POST'])
 def deleteElement(cake_id, element_id):
     if 'username' not in login_session:
         return redirect('/login')
     cake = session.query(Cake).filter_by(id = cake_id).one()
     elementToDelete = session.query(Element).filter_by(id = element_id).one()
-#    if login_session['user_id'] != restaurant.user_id:
-#        return "<script>function myFunction() {alert('You are not authorized to delete menu items to this restaurant. Please create your own restaurant in order to delete items.');}</script><body onload='myFunction()''>"
+    if login_session['user_id'] != cake.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to delete elements to this cake. Please create your own cake in order to delete elements.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         session.delete(elementToDelete)
         session.commit()
         flash('Element Successfully Deleted')
         return redirect(url_for('showElements', cake_id = cake_id))
     else:
-        return render_template('delement.html', element = elementToDelete)
+        return render_template('delement.html', element = elementToDelete, cake=cake)
+
+#JSON APIs to view Cake Information
+@app.route('/cake/<int:cake_id>/elements/JSON')
+def cakeElementsJSON(cake_id):
+    cake = session.query(Cake).filter_by(id = cake_id).one()
+    elements = session.query(Element).filter_by(cake_id = cake_id).all()
+    return jsonify(Element=[i.serialize for i in elements])
 
 
+@app.route('/cake/<int:cake_id>/elements/<int:element_id>/JSON')
+def elementJSON(cake_id, element_id):
+    elementVar = session.query(Element).filter_by(id = element_id).one()
+    return jsonify(elementVar = elementVar.serialize)
+
+@app.route('/cake/JSON')
+def cakesJSON():
+    cakes = session.query(Cake).all()
+    return jsonify(cakes= [i.serialize for i in cakes])
 
 if __name__ == '__main__':
   app.secret_key = 'super_secret_key'

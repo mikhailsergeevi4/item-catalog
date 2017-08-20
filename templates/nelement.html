@@ -1,28 +1,24 @@
+{% extends "header.html" %}
+{% block content %}
 
-	<div class="row divider green">
-		<div class="col-md-12"></div>
-	</div>
-	<div class="row banner menu">
-		<div class="col-md-11 col-md-offset-1 padding-none">
+	<div class="row">
 			<h1>New Element for {{cake.name}}</h1>
-		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6 col-md-offset-1 padding-top">
+		<div class="col-md-6">
 			<form action="#" method = "post">
 				<div class="form-group">
 					<label for="name">Name:</label>
-					<input type ="text" maxlength="50" class="form-control" name="name"placeholder="Name of the Element">
+					<input type ="text" maxlength="50" class="form-control" name="name" placeholder="Name of the Element">
 
 					<label for="price">Price:</label>
 					<div class="input-group">
-
 						<input type ="text" class="form-control" maxlength="10" name="price" placeholder="Price in $">
 					</div>
-					<button type="submit" class="btn btn-default" id="submit" type="submit">
-					<span class="glyphicon glyphicon-glass" aria-hidden="true"></span>Create</button>
-
+					<button type="submit" class="btn btn-margin" id="submit">
+					Create</button>
 				</div>
 			</form>
 		</div>
 	</div>
+{% endblock %}

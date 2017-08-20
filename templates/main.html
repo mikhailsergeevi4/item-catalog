@@ -1,53 +1,44 @@
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
+{% extends "header.html" %}
+{% block content %}
+
 	<div class = 'flash'>
-			      {% with messages = get_flashed_messages() %}
-	      {% if messages %}
-
-	        <ul>
-	        {% for message in messages %}
-	            <li> <strong> {{ message }} </strong> </li>
-	        {% endfor %}
-	        </ul>
-	        {% endif %}
-	    {% endwith %}
+		{% with messages = get_flashed_messages() %}
+	  	{% if messages %}
+      <ul>
+	    	{% for message in messages %}
+	    		<li> <strong> {{ message }} </strong> </li>
+	    	{% endfor %}
+	    </ul>
+	    {% endif %}
+	  {% endwith %}
 
 	</div>
-	<div class="row banner main">
-		<div class="col-md-1"></div>
-		<div class="col-md-11 padding-none">
+	<div class="row">
+	<div class="col-md-12">
 			<h1>Cakes</h1>
 		</div>
 	</div>
 
 
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 padding-none">
+	<div class="row">
+		<div class="col-md-12">
 			<a href="{{url_for('newCake')}}">
-				<button class="btn btn-default" id="new-cake">
-					<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Restaurant
+				<button class="btn" id="new-cake">
+					<span class=""></span>Add Cake
 				</button>
 			</a>
 		</div>
-		<div class="col-md-1"></div>
 	</div>
+	<div class="row">
 	{% for cake in cakes %}
 		<a href = "{{url_for('showElements', cake_id = cake.id)}}">
-			<div class="row">
-				<div class="col-md-1"></div>
-					<div class="col-md-10 restaurant-list">
+
+				<div class="col-md-3">
 						<h3>{{cake.name}}</h3></a>
 						<h4>What can I say about it: {{cake.description}}</h4>
 						<h4>Used biscuits: {{cake.course}}</h4>
 					</div>
-				<div class="col-md-1"></div>
-			</div>
 		</a>
 	{% endfor %}
+	</div>
+{% endblock %}

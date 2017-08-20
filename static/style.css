@@ -1,0 +1,13 @@
+.row {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.container {
+  max-width: 960px;
+}
+.flash {
+  color: red;
+}
