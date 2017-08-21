@@ -13,11 +13,13 @@
 	  {% endwith %}
 	</div>
 
-	<div class="row">
+	<div class="row cakes">
+		<div class="col-md-8">
 			<h1>{{ cake.name }}</h1>
+		</div>
 	</div>
 
-<div class="row">
+<div class="row top">
 		<div class="col-md-4">
 			<a href="{{url_for('editCake', cake_id = cake.id )}}">
 				<button class="btn" id="edit-cake">Edit Cake</button>
@@ -38,12 +40,14 @@
 </div>
 
 	<div class="row">
-  	<h2>Elements:</h2>
+		<div class="col-md-8">
+  		<h2>Elements:</h2>
+		</div>
 	</div>
 
 	<div class = 'row'>
   	{% for i in elements %}
-  	<div class = "col-md-3">
+  	<div class = "col-md-3 int">
   		<p>{{i.name}}</p>
   		<p>Cost {{i.price}} $ </p>
 			<div class="row">

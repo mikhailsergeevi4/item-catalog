@@ -13,18 +13,26 @@
 	  {% endwith %}
 
 	</div>
-	<div class="row">
-	<div class="col-md-12">
+	<div class="row cakes">
+		<div class="col-md-8">
 			<h1>Cakes</h1>
+		</div>
+		<div class="col-md-4">
+						{%if 'username' not in session %}
+				<div class="login"><a href="{{url_for('showLogin')}}">Click Here to Login </a></div>
+				{% else %}
+				<div class="login"><a href="{{url_for('gdisconnect')}}">Logout </a></div>
+				{% endif %}
+
 		</div>
 	</div>
 
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 top">
 			<a href="{{url_for('newCake')}}">
 				<button class="btn" id="new-cake">
-					<span class=""></span>Add Cake
+					<span class=""></span>New Cake
 				</button>
 			</a>
 		</div>
@@ -33,7 +41,7 @@
 	{% for cake in cakes %}
 		<a href = "{{url_for('showElements', cake_id = cake.id)}}">
 
-				<div class="col-md-3">
+				<div class="col-md-3 int">
 						<h3>{{cake.name}}</h3></a>
 						<h4>What can I say about it: {{cake.description}}</h4>
 						<h4>Used biscuits: {{cake.course}}</h4>
