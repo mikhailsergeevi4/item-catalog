@@ -5,16 +5,20 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 .container {
   max-width: 960px;
 }
+
 .flash {
   color: red;
 }
+
 .cakes {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
   margin: auto;
 }
+
 .int {
   margin: 10px 10px;
   border: 4px double black;
@@ -23,12 +27,14 @@
   margin-left: 4%;
   width: 250px;
 }
+
 .login {
   margin-top: 2em;
   margin-left: 25%;
   background-color: white;
   text-align: center;
 }
+
 .top {
   margin-top: 10px;
   text-align: center;
